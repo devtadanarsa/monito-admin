@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,15 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
 
 export default function Home() {
   return (
     <div>
       <div className="flex justify-end">
-        <Button size={"lg"}>
+        <Link className={buttonVariants({ size: "lg" })} href={"/new"}>
           Add Item <FaPlus className="ml-4" />
-        </Button>
+        </Link>
       </div>
       <Table className="mt-10">
         <TableCaption>A list of your recent invoices.</TableCaption>
