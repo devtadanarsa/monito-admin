@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { petFormSchema } from "../lib/form-schema";
@@ -25,20 +25,49 @@ import {
 import { Input } from "@/components/ui/input";
 import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { CiImageOn } from "react-icons/ci";
+import { PiPlusThin } from "react-icons/pi";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const [preview, setPreview] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    const objectURL = URL.createObjectURL(selectedFile);
+    setPreview(objectURL);
+  }, [selectedFile]);
+
+  const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    setSelectedFile(e.target.files[0]);
+  };
 
   const form = useForm<z.infer<typeof petFormSchema>>({
     resolver: zodResolver(petFormSchema),
+    defaultValues: {
+      additional: [],
+    },
   });
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
       const data = {
         ...val,
+        image: preview,
         additional: additionalInput,
       };
+
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -75,7 +104,37 @@ const AddPetPage = () => {
             title="Image"
             subtitle="Enter your pet image in here. Please choose your pet best image in here"
           >
-            <FormField
+            <div className="flex items-center gap-5">
+              {preview && (
+                <div className="border">
+                  <Image
+                    src={preview as string}
+                    alt="Image Preview"
+                    width={200}
+                    height={100}
+                    objectFit="contain"
+                  />
+                </div>
+              )}
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onSelectFile}
+                  className="absolute w-[200px] h-[100px] text-transparent file:hidden"
+                />
+                <div className="border border-black border-1 border-dashed w-[200px] h-[100px] py-5">
+                  <div>
+                    <PiPlusThin className="w-8 h-8 mx-auto" />
+                    <p className="text-sm text-center mt-2">
+                      Upload Image Here
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
@@ -90,7 +149,7 @@ const AddPetPage = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </InputField>
 
           <InputField
