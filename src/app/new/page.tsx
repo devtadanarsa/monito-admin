@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { CiImageOn } from "react-icons/ci";
 import { PiPlusThin } from "react-icons/pi";
 
 const AddPetPage = () => {
@@ -64,7 +63,7 @@ const AddPetPage = () => {
     try {
       const data = {
         ...val,
-        image: preview,
+        image: selectedFile,
         additional: additionalInput,
       };
 

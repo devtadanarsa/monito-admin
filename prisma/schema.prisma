@@ -12,3 +12,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Pet {
+  id         String   @id @default(cuid())
+  image      String
+  name       String
+  size       String
+  price      String
+  gender     String
+  additional String[]
+}
