@@ -1,12 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 import uniqid from "uniqid";
 
-const supabase = createClient(
-  process.env.DATABASE_URL!!,
-  process.env.DATABASE_PUBLIC_KEY!!
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!!,
+  process.env.NEXT_PUBLIC_SUPABASE_KEY!!
 );
 
-const supabaseUploadFile = async (file: File | string) => {
+export const supabaseUploadFile = async (file: File | string) => {
   const fileUrl = `pets-${uniqid()}`;
 
   const { data, error } = await supabase.storage
@@ -23,7 +23,7 @@ const supabaseUploadFile = async (file: File | string) => {
   };
 };
 
-const supabasePublicUrl = async (fileName: string) => {
+export const supabasePublicUrl = async (fileName: string) => {
   const {
     data: { publicUrl },
   } = await supabase.storage.from("pets").getPublicUrl(fileName);

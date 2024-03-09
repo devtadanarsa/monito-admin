@@ -27,6 +27,8 @@ import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
+import { supabaseUploadFile } from "@/lib/supabase";
+import axios from "axios";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
@@ -61,13 +63,21 @@ const AddPetPage = () => {
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
+      const { fileUrl, error } = await supabaseUploadFile(selectedFile!!);
+
       const data = {
         ...val,
-        image: selectedFile,
+        image: fileUrl,
         additional: additionalInput,
       };
 
-      console.log(data);
+      if (error) {
+        throw error;
+      }
+
+      await axios.post("/api/pets", { ...data });
+
+      console.log("nice");
     } catch (error) {
       console.log(error);
     }
