@@ -10,3 +10,9 @@ export async function POST(request: Request) {
 
   return NextResponse.json(newPet, { status: 201 });
 }
+
+export async function GET(request: Request) {
+  const result = await prisma.pet.findMany();
+
+  return NextResponse.json(result);
+}

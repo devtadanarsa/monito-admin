@@ -29,11 +29,13 @@ import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
 import { supabaseUploadFile } from "@/lib/supabase";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
+  const router = useRouter();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -76,8 +78,7 @@ const AddPetPage = () => {
       }
 
       await axios.post("/api/pets", { ...data });
-
-      console.log("nice");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }

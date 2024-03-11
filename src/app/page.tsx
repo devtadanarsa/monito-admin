@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Table,
@@ -8,10 +10,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
 import Link from "next/link";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
 
 export default function Home() {
+  const testing = async () => {
+    const res = await axios.get("/api/pets");
+    console.log(res.data);
+  };
+
+  testing();
+
+  // const res = await axios.get("/api/pets/categories");
+  // console.log(res);
+
   return (
     <div>
       <div className="flex justify-end">
