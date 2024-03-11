@@ -2,11 +2,8 @@ export type Pet = {
   id: string;
   image: string;
   name: string;
-  size: Size;
+  size: string;
   price: string;
-  gender: Gender;
+  gender: string;
   additional: string[];
 };
-
-type Size = ["Small", "Medium", "Large"];
-type Gender = ["Male", "Female"];
