@@ -30,6 +30,7 @@ import { PiPlusThin } from "react-icons/pi";
 import { supabaseUploadFile } from "@/lib/supabase";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
@@ -59,6 +60,9 @@ const AddPetPage = () => {
   const form = useForm<z.infer<typeof petFormSchema>>({
     resolver: zodResolver(petFormSchema),
     defaultValues: {
+      vaccinated: false,
+      dewormed: false,
+      microchip: false,
       additional: [],
     },
   });
@@ -66,17 +70,15 @@ const AddPetPage = () => {
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
       const { fileUrl, error } = await supabaseUploadFile(selectedFile!!);
-
       const data = {
         ...val,
         image: fileUrl,
         additional: additionalInput,
+        age: Number(val.age),
       };
-
       if (error) {
         throw error;
       }
-
       await axios.post("/api/pets", { ...data });
       router.push("/");
     } catch (error) {
@@ -143,28 +145,11 @@ const AddPetPage = () => {
                 </div>
               </div>
             </div>
-
-            {/* <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Bobby Kartanegara"
-                      className="w-1/2"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
           </InputField>
 
           <InputField
-            title="Size and Gender"
-            subtitle="Choose your pet size and gender. Size is only between small, medium, and large. Gender is only between male and female"
+            title="Size, Gender, and Age"
+            subtitle="Choose your pet size and gender and age. Size is only between small, medium, and large. Gender is only between male and female"
           >
             <div className="flex gap-4">
               <FormField
@@ -215,33 +200,149 @@ const AddPetPage = () => {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          placeholder="10"
+                          type="number"
+                          className="w-16"
+                          {...field}
+                        />
+                        <p>Months</p>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </InputField>
 
           <InputField
-            title="Price"
-            subtitle="Input your listed pet price here. Make sure you value them good so you're not regret your decision later"
+            title="Color"
+            subtitle="Choose your pet color. Select only the available options!"
           >
             <FormField
               control={form.control}
-              name="price"
+              name="color"
               render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center gap-2">
-                      <p>Rp</p>
-                      <Input
-                        placeholder="200000"
-                        type="number"
-                        className="w-1/6"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
+                <FormItem className="w-1/4">
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Color" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="red">Red</SelectItem>
+                      <SelectItem value="apricot">Apricot</SelectItem>
+                      <SelectItem value="black">Black</SelectItem>
+                      <SelectItem value="monchrome">Monochrome</SelectItem>
+                      <SelectItem value="silver">Silver</SelectItem>
+                      <SelectItem value="tan">Tan</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </InputField>
+
+          <InputField
+            title="Price and Location"
+            subtitle="Input your listed pet price and location here. Make sure you value them good so you're not regret your decision later"
+          >
+            <div className="flex items-center gap-8">
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Indonesia" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="flex items-center gap-2">
+                        <p>Rp</p>
+                        <Input placeholder="200000" type="number" {...field} />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </InputField>
+
+          <InputField
+            title="Certification"
+            subtitle="Fill the checkboxes where your pet have certification at"
+          >
+            <div className="flex items-center gap-8">
+              <FormField
+                control={form.control}
+                name="vaccinated"
+                render={({ field }) => (
+                  <FormItem className="space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Vaccinated</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="dewormed"
+                render={({ field }) => (
+                  <FormItem className="space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Dewormed</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="microchip"
+                render={({ field }) => (
+                  <FormItem className="space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Microchip</FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
           </InputField>
 
           <InputField

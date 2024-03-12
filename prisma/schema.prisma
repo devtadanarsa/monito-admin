@@ -14,11 +14,18 @@ datasource db {
 }
 
 model Pet {
-  id         String   @id @default(cuid())
-  image      String
-  name       String
-  size       String
-  price      String
-  gender     String
-  additional String[]
+  id            String   @id @default(cuid())
+  image         String
+  name          String
+  size          String
+  age           Int
+  color         String
+  location      String
+  price         String
+  gender        String
+  vaccinated    Boolean
+  dewormed      Boolean
+  microchip     Boolean
+  additional    String[]
+  publishedDate DateTime @default(now())
 }
