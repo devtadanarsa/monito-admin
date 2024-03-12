@@ -1,6 +1,4 @@
-/**
- * TODO : REFACTOR THE TABLES TO INCLUDE SERTIFICATIONS AND PUBLISHED DATE
- */
+"use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -12,15 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Link from "next/link";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
-import prisma from "../../prisma/client";
 import { Pet } from "./types";
 import { upperCaseFirst } from "upper-case-first";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter, useSearchParams } from "next/navigation";
+import { SORT_FILTER } from "./constants";
 
-export default async function Home() {
-  const petList = await prisma.pet.findMany();
-  console.log(petList);
+export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const sortedParams = searchParams.get("sortedBy");
+  console.log(sortedParams);
+
+  const [petList, setPetList] = useState<Pet[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: response } = await axios.get<Pet[]>(
+        `/api/pets?sortedBy=${sortedParams}`
+      );
+      setPetList(response);
+    };
+
+    fetchData();
+  }, [sortedParams]);
 
   return (
     <div>
@@ -29,8 +54,30 @@ export default async function Home() {
           Add Item <FaPlus className="ml-4" />
         </Link>
       </div>
+      <div className="flex items-center justify-between">
+        <div>
+          <Select onValueChange={(value) => router.push(`/?sortedBy=${value}`)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sorted By Date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {SORT_FILTER.map((item, i) => (
+                  <SelectItem
+                    key={item.label + i}
+                    value={item.href}
+                    onClick={() => router.push(`/?sortedBy=${item.href}`)}
+                  >
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       <Table className="mt-10">
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        {petList.length === 0 && <TableCaption>There is no data</TableCaption>}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px] text-center">No</TableHead>
@@ -50,7 +97,7 @@ export default async function Home() {
                 {upperCaseFirst(item.size)}
               </TableCell>
               <TableCell className="text-center">
-                Rp.{Number(item.price).toLocaleString("id-ID")}
+                Rp.{item.price.toLocaleString("id-ID")}
               </TableCell>
               <TableCell className="text-center">
                 {upperCaseFirst(item.gender)}

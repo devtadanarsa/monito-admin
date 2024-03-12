@@ -31,12 +31,14 @@ import { supabaseUploadFile } from "@/lib/supabase";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/components/ui/use-toast";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!selectedFile) {
@@ -75,11 +77,17 @@ const AddPetPage = () => {
         image: fileUrl,
         additional: additionalInput,
         age: Number(val.age),
+        price: Number(val.price),
       };
       if (error) {
         throw error;
       }
+
       await axios.post("/api/pets", { ...data });
+      toast({
+        title: "Pets added",
+        description: "Your pet is successfully added to our database",
+      });
       router.push("/");
     } catch (error) {
       console.log(error);

@@ -21,7 +21,7 @@ model Pet {
   age           Int
   color         String
   location      String
-  price         String
+  price         Int
   gender        String
   vaccinated    Boolean
   dewormed      Boolean
