@@ -95,7 +95,7 @@ const AddPetPage = () => {
   };
 
   return (
-    <div>
+    <div className="mt-10 pb-20">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
           <InputField

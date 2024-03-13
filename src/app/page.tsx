@@ -80,14 +80,9 @@ export default function Home() {
   );
 
   return (
-    <div>
+    <div className="pt-8">
       <div>
-        <div className="flex justify-end">
-          <Link className={buttonVariants({ size: "lg" })} href={"/new"}>
-            Add Item <FaPlus className="ml-4" />
-          </Link>
-        </div>
-        <div className="flex items-center justify-between mt-10">
+        <div className="flex items-center justify-between">
           <div>
             <Select
               onValueChange={(value) => router.push(`?sortedBy=${value}`)}
