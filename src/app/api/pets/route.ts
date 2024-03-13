@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../prisma/client";
-import { log } from "console";
-import { NextApiRequest } from "next";
-import capitalize from "capitalize";
 
 export async function POST(request: Request) {
   const reqBody = await request.json();
@@ -18,7 +15,8 @@ export async function GET(request: NextRequest) {
   let orderBy: any[] = [{ publishedDate: "asc" }];
   const sortedByParams = request.nextUrl.searchParams.get("sortedBy");
   const nameParams = request.nextUrl.searchParams.get("name") ?? "";
-  console.log(request.nextUrl);
+  const pageParams = request.nextUrl.searchParams.get("page") ?? 1;
+  const skip = nameParams.length == 0 ? ((pageParams as number) - 1) * 2 : 0;
 
   switch (sortedByParams) {
     case "date":
@@ -32,7 +30,11 @@ export async function GET(request: NextRequest) {
       break;
   }
 
+  const totalResult = await prisma.pet.count();
+
   const result = await prisma.pet.findMany({
+    skip,
+    take: 2,
     where: {
       name: {
         contains: nameParams,
@@ -41,5 +43,5 @@ export async function GET(request: NextRequest) {
     orderBy,
   });
 
-  return NextResponse.json(result);
+  return NextResponse.json({ data: result, total: totalResult });
 }
