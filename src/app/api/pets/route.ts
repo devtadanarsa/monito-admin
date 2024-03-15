@@ -16,17 +16,18 @@ export async function GET(request: NextRequest) {
   const sortedByParams = request.nextUrl.searchParams.get("sortedBy");
   const nameParams = request.nextUrl.searchParams.get("name") ?? "";
   const pageParams = request.nextUrl.searchParams.get("page") ?? 1;
+  const orderRuleParams = request.nextUrl.searchParams.get("order") ?? "asc";
   const skip = nameParams.length == 0 ? ((pageParams as number) - 1) * 5 : 0;
 
   switch (sortedByParams) {
     case "date":
-      orderBy = [{ publishedDate: "asc" }];
+      orderBy = [{ publishedDate: orderRuleParams }];
       break;
     case "name":
-      orderBy = [{ name: "asc" }];
+      orderBy = [{ name: orderRuleParams }];
       break;
     case "price":
-      orderBy = [{ price: "asc" }];
+      orderBy = [{ price: orderRuleParams }];
       break;
   }
 

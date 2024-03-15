@@ -28,7 +28,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
-import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp, FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import { Pet } from "./types";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -39,6 +39,8 @@ import capitalize from "capitalize";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
+import { IoIosArrowRoundUp } from "react-icons/io";
+import { IoIosArrowRoundDown } from "react-icons/io";
 
 export default function Home() {
   const router = useRouter();
@@ -49,18 +51,19 @@ export default function Home() {
   const [totalData, setTotalData] = useState<number>(0);
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [orderRule, setOrderRule] = useState<string>("asc");
 
   useEffect(() => {
     const fetchData = async () => {
       const { data: response } = await axios.get(
-        `/api/pets?sortedBy=${sortedParams}&name=${searchInput}&page=${currentPage}`
+        `/api/pets?sortedBy=${sortedParams}&name=${searchInput}&order=${orderRule}&page=${currentPage}`
       );
       setPetList(response.data);
       setTotalData(response.total);
     };
 
     fetchData();
-  }, [sortedParams, searchInput, currentPage]);
+  }, [sortedParams, searchInput, currentPage, orderRule]);
 
   const deletePet = async (id: string, image: string) => {
     try {
@@ -119,7 +122,7 @@ export default function Home() {
     <div className="pt-8">
       <div>
         <div className="flex items-center justify-between">
-          <div>
+          <div className="flex items-center gap-2">
             <Select
               onValueChange={(value) => router.push(`?sortedBy=${value}`)}
             >
@@ -136,6 +139,22 @@ export default function Home() {
                 </SelectGroup>
               </SelectContent>
             </Select>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                orderRule === "asc"
+                  ? setOrderRule("desc")
+                  : setOrderRule("asc");
+              }}
+              className="text-2xl"
+            >
+              {orderRule === "asc" ? (
+                <IoIosArrowRoundUp />
+              ) : (
+                <IoIosArrowRoundDown />
+              )}
+            </Button>
           </div>
           <div className="flex items-center gap-3">
             <HiMagnifyingGlass className="w-5 h-5" />
