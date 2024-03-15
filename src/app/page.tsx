@@ -64,12 +64,14 @@ export default function Home() {
 
   const deletePet = async (id: string, image: string) => {
     try {
-      const result = await supabase.storage.from("pets").remove([image]);
-      await axios.delete(`/api/pets/${id}`, {
-        params: {
-          image,
-        },
-      });
+      const { data, error } = await supabase.storage
+        .from("pets")
+        .remove([`public/${image}`]);
+
+      if (error) throw error;
+
+      await axios.delete(`/api/pets/${id}`);
+      console.log(data);
 
       toast({
         title: "Pet removed",
