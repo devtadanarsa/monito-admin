@@ -86,7 +86,17 @@ export default function Home() {
   };
 
   const paginationItem = [];
-  for (let i = 1; i <= Math.ceil(totalData / 2); i++) {
+  const totalPages = Math.ceil(totalData / 5);
+  const maxPagesToShow = 3;
+
+  let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+  let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+  if (endPage - startPage < maxPagesToShow - 1) {
+    startPage = Math.max(1, endPage - maxPagesToShow + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
     paginationItem.push(
       <PaginationItem key={i}>
         <PaginationLink
@@ -154,7 +164,7 @@ export default function Home() {
             {petList.map((item: Pet, i: number) => (
               <TableRow key={item.id}>
                 <TableCell className="font-medium text-center">
-                  {i + (currentPage - 1) * 2 + 1}
+                  {i + (currentPage - 1) * 5 + 1}
                 </TableCell>
                 <TableCell className="text-center">{item.name}</TableCell>
                 <TableCell className="text-center">
@@ -200,9 +210,9 @@ export default function Home() {
             <PaginationItem>
               <PaginationNext
                 onClick={() => setCurrentPage(currentPage + 1)}
-                aria-disabled={currentPage === Math.ceil(totalData / 2)}
+                aria-disabled={currentPage === endPage}
                 className={`cursor-pointer ${
-                  currentPage === Math.ceil(totalData / 2)
+                  currentPage === endPage
                     ? "pointer-events-none opacity-50"
                     : ""
                 }`}

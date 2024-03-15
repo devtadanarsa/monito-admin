@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const sortedByParams = request.nextUrl.searchParams.get("sortedBy");
   const nameParams = request.nextUrl.searchParams.get("name") ?? "";
   const pageParams = request.nextUrl.searchParams.get("page") ?? 1;
-  const skip = nameParams.length == 0 ? ((pageParams as number) - 1) * 2 : 0;
+  const skip = nameParams.length == 0 ? ((pageParams as number) - 1) * 5 : 0;
 
   switch (sortedByParams) {
     case "date":
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   const result = await prisma.pet.findMany({
     skip,
-    take: 2,
+    take: 5,
     where: {
       name: {
         contains: nameParams,
