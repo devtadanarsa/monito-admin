@@ -37,10 +37,13 @@ import { SORT_FILTER, TABLE_COLUMN } from "./constants";
 import { Input } from "@/components/ui/input";
 import capitalize from "capitalize";
 import { HiMagnifyingGlass } from "react-icons/hi2";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Home() {
   const router = useRouter();
   const sortedParams = useSearchParams().get("sortedBy");
+  const { toast } = useToast();
 
   const [petList, setPetList] = useState<Pet[]>([]);
   const [totalData, setTotalData] = useState<number>(0);
@@ -58,6 +61,27 @@ export default function Home() {
 
     fetchData();
   }, [sortedParams, searchInput, currentPage]);
+
+  const deletePet = async (id: string, image: string) => {
+    try {
+      const result = await supabase.storage.from("pets").remove([image]);
+      await axios.delete(`/api/pets/${id}`, {
+        params: {
+          image,
+        },
+      });
+
+      toast({
+        title: "Pet removed",
+        description: "Your pet has succesfully removed",
+      });
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const paginationItem = [];
   for (let i = 1; i <= Math.ceil(totalData / 2); i++) {
@@ -145,7 +169,10 @@ export default function Home() {
                     <Button size={"icon"} variant={"outline"}>
                       <FaPen />
                     </Button>
-                    <Button size={"icon"}>
+                    <Button
+                      size={"icon"}
+                      onClick={() => deletePet(item.id, item.image)}
+                    >
                       <FaTrash />
                     </Button>
                   </div>
@@ -168,26 +195,14 @@ export default function Home() {
               />
             </PaginationItem>
             {paginationItem}
-            {/* <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem> */}
             <PaginationItem>
               <PaginationNext
                 onClick={() => setCurrentPage(currentPage + 1)}
-                aria-disabled={petList.length <= 2}
+                aria-disabled={currentPage === Math.ceil(totalData / 2)}
                 className={`cursor-pointer ${
-                  petList.length < 2 ? "pointer-events-none opacity-50" : ""
+                  currentPage === Math.ceil(totalData / 2)
+                    ? "pointer-events-none opacity-50"
+                    : ""
                 }`}
               />
             </PaginationItem>
