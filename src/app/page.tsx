@@ -27,8 +27,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import Link from "next/link";
-import { FaArrowDown, FaArrowUp, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash } from "react-icons/fa";
 import { Pet } from "./types";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -72,19 +71,19 @@ export default function Home() {
         .remove([`public/${image}`]);
 
       if (error) throw error;
-
       await axios.delete(`/api/pets/${id}`);
-      console.log(data);
 
       toast({
         title: "Pet removed",
-        description: "Your pet has succesfully removed",
+        description: "Your pet has succesfully removed from the database",
       });
 
-      router.push("/");
-      router.refresh();
+      setCurrentPage(1);
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "An error occured",
+        description: "Please try again",
+      });
     }
   };
 
