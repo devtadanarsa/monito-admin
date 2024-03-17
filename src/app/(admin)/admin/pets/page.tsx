@@ -196,7 +196,11 @@ export default function Home() {
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex justify-center gap-4">
-                    <Button size={"icon"} variant={"outline"}>
+                    <Button
+                      size={"icon"}
+                      variant={"outline"}
+                      onClick={() => router.push(`/admin/pets/${item.id}`)}
+                    >
                       <FaPen />
                     </Button>
                     <Button
