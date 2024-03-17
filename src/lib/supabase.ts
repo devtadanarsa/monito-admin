@@ -26,7 +26,7 @@ export const supabaseUploadFile = async (file: File | string) => {
 export const supabasePublicUrl = async (fileName: string) => {
   const {
     data: { publicUrl },
-  } = await supabase.storage.from("pets").getPublicUrl(fileName);
+  } = await supabase.storage.from("pets").getPublicUrl(`public/${fileName}`);
 
   return publicUrl;
 };

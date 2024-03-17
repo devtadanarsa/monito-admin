@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { EnumValues, ZodEnum, z } from "zod";
 import { petFormSchema } from "../../../../lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -27,46 +27,28 @@ import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
-import { supabaseUploadFile } from "@/lib/supabase";
+import { supabasePublicUrl, supabaseUploadFile } from "@/lib/supabase";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import { Pet } from "@/app/types";
+import capitalize from "capitalize";
 
 const EditPetPage = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // variables for this page
+  const petId = pathname.split("/").pop();
+  const [petData, setPetData] = useState<Pet>();
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
-  const router = useRouter();
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setSelectedFile(undefined);
-      return;
-    }
-
-    const objectURL = URL.createObjectURL(selectedFile);
-    setPreview(objectURL);
-  }, [selectedFile]);
-
-  const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-
-    setSelectedFile(e.target.files[0]);
-  };
 
   const form = useForm<z.infer<typeof petFormSchema>>({
     resolver: zodResolver(petFormSchema),
-    defaultValues: {
-      vaccinated: false,
-      dewormed: false,
-      microchip: false,
-      additional: [],
-    },
   });
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
@@ -92,6 +74,64 @@ const EditPetPage = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // get the pet data
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: response } = await axios.get(`/api/pets/${petId}`);
+      setPetData(response);
+    };
+
+    fetchData();
+  }, [petId]);
+
+  useEffect(() => {
+    if (petData) {
+      form.reset({
+        name: petData?.name,
+        size: petData.size,
+        gender: petData.gender,
+        age: String(petData.age),
+        color: petData.color,
+        location: petData.location,
+        price: String(petData.price),
+        vaccinated: petData.vaccinated,
+        dewormed: petData.dewormed,
+        microchip: petData.microchip,
+        additional: petData.additional,
+      });
+
+      const getImageUrl = async () => {
+        const imageUrl = await supabasePublicUrl(petData.image);
+        console.log(imageUrl);
+        setPreview(imageUrl);
+      };
+
+      getImageUrl();
+      setAdditionalInput(petData?.additional!!);
+      setPreview(petData.image);
+    }
+  }, [petData, form]);
+
+  // get the changes on image form
+  useEffect(() => {
+    if (!selectedFile) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    const objectURL = URL.createObjectURL(selectedFile);
+    setPreview(objectURL);
+  }, [selectedFile]);
+
+  const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    setSelectedFile(e.target.files[0]);
   };
 
   return (
@@ -133,6 +173,7 @@ const EditPetPage = () => {
                     width={200}
                     height={100}
                     objectFit="contain"
+                    unoptimized
                   />
                 </div>
               )}
@@ -171,7 +212,9 @@ const EditPetPage = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Size" />
+                          <SelectValue
+                            placeholder={capitalize(petData?.size ?? "")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -196,7 +239,9 @@ const EditPetPage = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Gender" />
+                          <SelectValue
+                            placeholder={capitalize(petData?.gender ?? "")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -247,7 +292,9 @@ const EditPetPage = () => {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Color" />
+                        <SelectValue
+                          placeholder={capitalize(petData?.color ?? "")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -266,7 +313,7 @@ const EditPetPage = () => {
           </InputField>
 
           <InputField
-            title="Price and Location"
+            title="Location and Price"
             subtitle="Input your listed pet price and location here. Make sure you value them good so you're not regret your decision later"
           >
             <div className="flex items-center gap-8">
