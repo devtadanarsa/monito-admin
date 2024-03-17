@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import "./globals.css";
+import "./../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Sidebar from "@/components/organisms/Sidebar";
 import Header from "@/components/organisms/Header";

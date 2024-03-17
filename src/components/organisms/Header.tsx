@@ -12,7 +12,10 @@ const Header = () => {
           <h3 className="text-sm">Admin</h3>
           <h2 className="font-semibold">Mr. John Doe</h2>
         </div>
-        <Link className={buttonVariants({ size: "lg" })} href={"/new"}>
+        <Link
+          className={buttonVariants({ size: "lg" })}
+          href={"/admin/pets/new"}
+        >
           Add Item <FaPlus className="ml-4" />
         </Link>
       </div>

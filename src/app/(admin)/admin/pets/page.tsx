@@ -28,11 +28,11 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { FaPen, FaTrash } from "react-icons/fa";
-import { Pet } from "./types";
+import { Pet } from "../../../types";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SORT_FILTER, TABLE_COLUMN } from "./constants";
+import { SORT_FILTER, TABLE_COLUMN } from "../../../constants";
 import { Input } from "@/components/ui/input";
 import capitalize from "capitalize";
 import { HiMagnifyingGlass } from "react-icons/hi2";

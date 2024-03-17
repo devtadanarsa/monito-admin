@@ -3,7 +3,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { petFormSchema } from "../lib/form-schema";
+import { petFormSchema } from "../../../../lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -88,7 +88,7 @@ const AddPetPage = () => {
         title: "Pets added",
         description: "Your pet is successfully added to our database",
       });
-      router.push("/");
+      router.push("/admin/pets");
     } catch (error) {
       console.log(error);
     }

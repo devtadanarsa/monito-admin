@@ -22,12 +22,12 @@ export const SIDEBAR_LINK = [
   {
     label: "Home",
     icon: AiOutlineHome,
-    href: "/",
+    href: "/admin",
   },
   {
     label: "Pet Listing",
     icon: PiDog,
-    href: "/pets",
+    href: "/admin/pets",
   },
   {
     label: "Messages",
