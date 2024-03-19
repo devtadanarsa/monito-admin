@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     },
   });
 
-  return NextResponse.json(result, { status: 201 });
+  return NextResponse.json(result);
 }
 
 export async function DELETE(request: NextRequest) {
@@ -24,4 +24,16 @@ export async function DELETE(request: NextRequest) {
   });
 
   return NextResponse.json({ result });
+}
+
+export async function PUT(request: Request) {
+  const reqBody = await request.json();
+  const updatedPet = await prisma.pet.update({
+    where: {
+      id: reqBody.id,
+    },
+    data: reqBody,
+  });
+
+  return NextResponse.json(updatedPet);
 }

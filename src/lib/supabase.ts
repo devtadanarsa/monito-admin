@@ -23,6 +23,23 @@ export const supabaseUploadFile = async (file: File | string) => {
   };
 };
 
+export const supabaseUpdateFile = async (
+  newFile: File | string,
+  oldFile: string
+) => {
+  const { data, error } = await supabase.storage
+    .from("pets")
+    .update(`public/${oldFile}`, newFile, {
+      cacheControl: "3600",
+      upsert: true,
+    });
+
+  return {
+    data,
+    error,
+  };
+};
+
 export const supabasePublicUrl = async (fileName: string) => {
   const {
     data: { publicUrl },

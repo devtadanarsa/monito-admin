@@ -27,7 +27,11 @@ import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
-import { supabasePublicUrl, supabaseUploadFile } from "@/lib/supabase";
+import {
+  supabasePublicUrl,
+  supabaseUpdateFile,
+  supabaseUploadFile,
+} from "@/lib/supabase";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -53,22 +57,27 @@ const EditPetPage = () => {
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
-      const { fileUrl, error } = await supabaseUploadFile(selectedFile!!);
+      if (selectedFile) {
+        const { data, error } = await supabaseUpdateFile(
+          selectedFile!!,
+          petData?.image!!
+        );
+        if (error) throw error;
+      }
+
       const data = {
         ...val,
-        image: fileUrl,
+        id: petId,
+        image: petData?.image,
         additional: additionalInput,
         age: Number(val.age),
         price: Number(val.price),
       };
-      if (error) {
-        throw error;
-      }
 
-      await axios.post("/api/pets", { ...data });
+      await axios.put(`/api/pets/${petId}`, { ...data });
       toast({
-        title: "Pets added",
-        description: "Your pet is successfully added to our database",
+        title: "Pets updated",
+        description: "Your pet is successfully updated in our database",
       });
       router.push("/admin/pets");
     } catch (error) {
