@@ -26,7 +26,7 @@ export default function RootLayout({
           </div>
           <div className="w-10/12 pr-10 pt-8">
             <Header />
-            <main>{children}</main>
+            <main className="py-12">{children}</main>
           </div>
         </div>
         <Toaster />

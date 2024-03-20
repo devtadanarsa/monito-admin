@@ -104,7 +104,7 @@ export default function Home() {
         <PaginationLink
           isActive={currentPage === i}
           onClick={() => setCurrentPage(i)}
-          className="cursor-pointer"
+          className="cursor-pointer border-primary"
         >
           {i}
         </PaginationLink>
@@ -118,14 +118,14 @@ export default function Home() {
   );
 
   return (
-    <div className="pt-8">
+    <div>
       <div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Select
               onValueChange={(value) => router.push(`?sortedBy=${value}`)}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-primary">
                 <SelectValue placeholder="Sorted By Date" />
               </SelectTrigger>
               <SelectContent>
@@ -149,31 +149,31 @@ export default function Home() {
               className="text-2xl"
             >
               {orderRule === "asc" ? (
-                <IoIosArrowRoundUp />
+                <IoIosArrowRoundUp className="text-primary" />
               ) : (
-                <IoIosArrowRoundDown />
+                <IoIosArrowRoundDown className="text-primary" />
               )}
             </Button>
           </div>
           <div className="flex items-center gap-3">
-            <HiMagnifyingGlass className="w-5 h-5" />
+            <HiMagnifyingGlass className="w-5 h-5 text-primary" />
             <Input
               placeholder="Search by name"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-fit"
+              className="w-fit border-primary"
             />
           </div>
         </div>
-        <Table className="mt-4">
+        <Table className="mt-10">
           {petList.length === 0 && (
             <TableCaption>There is no data</TableCaption>
           )}
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-primary hover:bg-primary">
               {TABLE_COLUMN.map((item: string, i: number) => (
                 <TableHead className="text-center" key={i}>
-                  {item}
+                  <p className="text-white">{item}</p>
                 </TableHead>
               ))}
             </TableRow>
@@ -200,12 +200,15 @@ export default function Home() {
                       size={"icon"}
                       variant={"outline"}
                       onClick={() => router.push(`/admin/pets/${item.id}`)}
+                      className="border-primary text-orange-primary hover:text-orange-primary"
                     >
-                      <FaPen />
+                      <FaPen className="text-primary" />
                     </Button>
                     <Button
                       size={"icon"}
                       onClick={() => deletePet(item.id, item.image)}
+                      variant={"outline"}
+                      className="border-red-500 text-red-500 hover:text-red-500"
                     >
                       <FaTrash />
                     </Button>
