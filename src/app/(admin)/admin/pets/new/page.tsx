@@ -32,6 +32,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import { RxCross1 } from "react-icons/rx";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
@@ -393,7 +394,17 @@ const AddPetPage = () => {
                     variant={"outline"}
                     className="px-3 py-1 rounded-none"
                   >
-                    {item}
+                    {item}{" "}
+                    <RxCross1
+                      className="text-xs ml-4 cursor-pointer"
+                      onClick={() => {
+                        setAdditionalInput((prevInput) => {
+                          const updatedInfo = [...prevInput];
+                          updatedInfo.splice(i, 1);
+                          return updatedInfo;
+                        });
+                      }}
+                    />
                   </Badge>
                 ))}
               </div>
