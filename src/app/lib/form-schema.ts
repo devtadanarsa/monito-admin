@@ -26,3 +26,10 @@ export const petFormSchema = z.object({
   microchip: z.boolean(),
   additional: z.array(z.string(), {}),
 });
+
+export const loginFormSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Please enter a valid email" }),
+  password: z.string({ required_error: "Password is required" }),
+});
