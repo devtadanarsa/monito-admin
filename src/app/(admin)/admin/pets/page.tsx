@@ -40,6 +40,7 @@ import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
 import { IoIosArrowRoundUp } from "react-icons/io";
 import { IoIosArrowRoundDown } from "react-icons/io";
+import jwt from "jsonwebtoken";
 
 export default function Home() {
   const router = useRouter();
@@ -51,6 +52,8 @@ export default function Home() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [orderRule, setOrderRule] = useState<string>("asc");
+
+  console.log(jwt.decode(localStorage.getItem("jwtToken")!!));
 
   useEffect(() => {
     const fetchData = async () => {

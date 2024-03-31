@@ -11,7 +11,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -21,14 +23,35 @@ import { z } from "zod";
 
 const LoginPage = () => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    try {
+      const result = await axios.post("/api/login", { ...values });
+      if (result.data.error) {
+        toast({
+          title: "Some error occured",
+          description: "Your password is incorrect",
+        });
+      }
+      localStorage.setItem("jwtToken", result.data.token);
+      await toast({
+        title: "Login successfull",
+        description: "You have been authenticated",
+      });
+    } catch (error) {
+      await toast({
+        title: "Some error occurred",
+        description: "Please try again",
+      });
+    }
   };
+
+  console.log(localStorage.getItem("jwtToken"));
 
   return (
     <div className="px-24 py-12 h-screen">
@@ -67,7 +90,7 @@ const LoginPage = () => {
                     <FormItem>
                       <FormControl>
                         <Input
-                          placeholder="Username"
+                          placeholder="Email"
                           {...field}
                           className="border-primary h-14"
                         />
