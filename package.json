@@ -19,6 +19,8 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@supabase/supabase-js": "^2.39.7",
     "axios": "^1.6.7",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "capitalize": "^2.0.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -35,6 +37,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/capitalize": "^2.0.2",
     "@types/node": "^20",
     "@types/react": "^18",

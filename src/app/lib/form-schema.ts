@@ -39,5 +39,7 @@ export const registerFormSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email({ message: "Please enter a valid email" }),
-  password: z.string({ required_error: "Password is required" }),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(5, { message: "Password must have at least 5 characters" }),
 });

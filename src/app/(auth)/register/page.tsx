@@ -10,7 +10,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -20,13 +22,27 @@ import { z } from "zod";
 
 const RegisterPage = () => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
+    try {
+      await axios.post("/api/user", { ...values });
+      await toast({
+        title: "User added",
+        description: "New user successfully added to the databases",
+      });
+
+      router.push("/login");
+    } catch (error) {
+      await toast({
+        title: "Failed adding user",
+        description: "Please try again!",
+      });
+    }
   };
 
   return (
@@ -84,7 +100,7 @@ const RegisterPage = () => {
                     <FormItem>
                       <FormControl>
                         <Input
-                          placeholder="Username"
+                          placeholder="Email"
                           {...field}
                           className="border-primary h-14"
                         />
