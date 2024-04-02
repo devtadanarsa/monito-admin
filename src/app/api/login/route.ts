@@ -34,7 +34,6 @@ export async function POST(request: Request) {
       (err, token) => {
         if (err) reject(err);
         else {
-          console.log(token);
           resolve(NextResponse.json({ token: token }, { status: 200 }));
         }
       }

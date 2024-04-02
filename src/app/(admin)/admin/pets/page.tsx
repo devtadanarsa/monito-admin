@@ -41,6 +41,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { IoIosArrowRoundUp } from "react-icons/io";
 import { IoIosArrowRoundDown } from "react-icons/io";
 import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [orderRule, setOrderRule] = useState<string>("asc");
 
-  console.log(jwt.decode(localStorage.getItem("jwtToken")!!));
+  console.log(Cookies.get("jwtToken"));
 
   useEffect(() => {
     const fetchData = async () => {

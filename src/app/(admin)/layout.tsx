@@ -4,6 +4,8 @@ import "./../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Sidebar from "@/components/organisms/Sidebar";
 import Header from "@/components/organisms/Header";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -17,6 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const jwtToken = cookieStore.get("jwtToken");
+
+  if (!jwtToken) {
+    redirect("/login");
+  }
+
   return (
     <html lang="en">
       <body className={openSans.className}>

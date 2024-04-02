@@ -20,6 +20,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { FaFacebook, FaGoogle, FaTwitter } from "react-icons/fa";
 import { z } from "zod";
+import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -38,11 +39,15 @@ const LoginPage = () => {
           description: "Your password is incorrect",
         });
       }
-      localStorage.setItem("jwtToken", result.data.token);
+
+      Cookies.set("jwtToken", result.data.token, { expires: 1 });
+
       await toast({
         title: "Login successfull",
         description: "You have been authenticated",
       });
+
+      await router.push("/admin");
     } catch (error) {
       await toast({
         title: "Some error occurred",
@@ -50,8 +55,6 @@ const LoginPage = () => {
       });
     }
   };
-
-  console.log(localStorage.getItem("jwtToken"));
 
   return (
     <div className="px-24 py-12 h-screen">
