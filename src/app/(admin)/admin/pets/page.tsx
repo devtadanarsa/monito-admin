@@ -54,8 +54,6 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [orderRule, setOrderRule] = useState<string>("asc");
 
-  console.log(Cookies.get("jwtToken"));
-
   useEffect(() => {
     const fetchData = async () => {
       const { data: response } = await axios.get(

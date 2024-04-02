@@ -34,7 +34,7 @@ export default function RootLayout({
             <Sidebar />
           </div>
           <div className="w-10/12 pr-10 pt-8">
-            <Header />
+            <Header token={jwtToken.value} />
             <main className="py-12">{children}</main>
           </div>
         </div>

@@ -21,6 +21,7 @@ export async function POST(request: Request) {
 
   const payload = {
     id: user.id,
+    name: user.fullName,
     email: user.email,
   };
 

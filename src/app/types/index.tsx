@@ -13,3 +13,11 @@ export type Pet = {
   microchip: boolean;
   additional: string[];
 };
+
+export interface DecodedToken {
+  id: string;
+  name: string;
+  email: string;
+  iat: number;
+  exp: number;
+}

@@ -1,16 +1,25 @@
 import Link from "next/link";
-import React from "react";
+import React, { FC } from "react";
 import { buttonVariants } from "../ui/button";
 import { FaPlus } from "react-icons/fa";
 import { Separator } from "../ui/separator";
+import jwt from "jsonwebtoken";
+import { DecodedToken } from "@/app/types";
 
-const Header = () => {
+interface HeaderProps {
+  token: string;
+}
+
+const Header: FC<HeaderProps> = ({ token }) => {
+  const jwtToken: DecodedToken = jwt.decode(token) as DecodedToken;
+  console.log(jwtToken!!.name);
+
   return (
     <>
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h3 className="text-sm">Admin</h3>
-          <h2 className="font-semibold text-primary">Mr. John Doe</h2>
+          <h2 className="font-semibold text-primary">{jwtToken.name}</h2>
         </div>
         <Link
           className={buttonVariants({ size: "lg" })}
