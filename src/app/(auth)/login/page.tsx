@@ -33,21 +33,22 @@ const LoginPage = () => {
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
     try {
       const result = await axios.post("/api/login", { ...values });
+
       if (result.data.error) {
         toast({
-          title: "Some error occured",
-          description: "Your password is incorrect",
+          title: "Some Error Occurred",
+          description: "Your email or password is incorrect",
         });
+      } else {
+        Cookies.set("jwtToken", result.data.token, { expires: 1 });
+
+        await toast({
+          title: "Login successfull",
+          description: "You have been authenticated",
+        });
+
+        await router.push("/admin");
       }
-
-      Cookies.set("jwtToken", result.data.token, { expires: 1 });
-
-      await toast({
-        title: "Login successfull",
-        description: "You have been authenticated",
-      });
-
-      await router.push("/admin");
     } catch (error) {
       await toast({
         title: "Some error occurred",
