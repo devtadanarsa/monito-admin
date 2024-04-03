@@ -12,7 +12,6 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ token }) => {
   const jwtToken: DecodedToken = jwt.decode(token) as DecodedToken;
-  console.log(jwtToken!!.name);
 
   return (
     <>

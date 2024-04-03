@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       payload,
       process.env.NEXT_PUBLIC_JWT_SECRET!!,
       {
-        expiresIn: 8 * 3600,
+        expiresIn: "1d",
       },
       (err, token) => {
         if (err) reject(err);
