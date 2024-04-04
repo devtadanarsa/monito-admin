@@ -28,6 +28,8 @@ model Pet {
   microchip     Boolean
   additional    String[]
   publishedDate DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
 }
 
 model User {
@@ -35,4 +37,5 @@ model User {
   fullName String
   email    String
   password String
+  pets     Pet[]
 }
