@@ -78,7 +78,11 @@ export default function Home() {
         .remove([`public/${image}`]);
 
       if (error) throw error;
-      await axios.delete(`/api/pets/${id}`);
+      await axios.delete(`/api/pets/${id}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
 
       toast({
         title: "Pet removed",

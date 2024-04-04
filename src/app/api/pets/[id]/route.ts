@@ -1,6 +1,7 @@
-import { supabase } from "@/lib/supabase";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
+import { DecodedToken } from "@/app/types";
+import jwt from "jsonwebtoken";
 
 export async function GET(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
@@ -16,6 +17,15 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
+  const headers = await request.headers;
+
+  const jwtTokenPayload: DecodedToken = jwt.decode(
+    headers.get("Authorization")?.split(" ")?.pop() as string
+  ) as DecodedToken;
+
+  if (!jwtTokenPayload) {
+    return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
+  }
 
   const result = await prisma.pet.delete({
     where: {
@@ -27,12 +37,22 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function PUT(request: Request) {
+  const headers = await request.headers;
   const reqBody = await request.json();
+
+  const jwtTokenPayload: DecodedToken = jwt.decode(
+    headers.get("Authorization")?.split(" ")?.pop() as string
+  ) as DecodedToken;
+
+  if (!jwtTokenPayload) {
+    return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
+  }
+
   const updatedPet = await prisma.pet.update({
     where: {
       id: reqBody.id,
     },
-    data: reqBody,
+    data: { ...reqBody, userId: jwtTokenPayload.id },
   });
 
   return NextResponse.json(updatedPet);

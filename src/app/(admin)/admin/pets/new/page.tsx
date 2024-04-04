@@ -34,7 +34,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { RxCross1 } from "react-icons/rx";
 import Cookies from "js-cookie";
-import jwt from "jsonwebtoken";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);

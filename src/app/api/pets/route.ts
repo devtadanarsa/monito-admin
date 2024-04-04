@@ -11,6 +11,10 @@ export async function POST(request: Request) {
     headers.get("Authorization")?.split(" ")?.pop() as string
   ) as DecodedToken;
 
+  if (!jwtTokenPayload) {
+    return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
+  }
+
   const newPet = await prisma.pet.create({
     data: { ...reqBody, userId: jwtTokenPayload.id },
   });
@@ -20,9 +24,14 @@ export async function POST(request: Request) {
 
 export async function GET(request: NextRequest) {
   const headers = await request.headers;
+
   const jwtTokenPayload: DecodedToken = jwt.decode(
     headers.get("Authorization")?.split(" ")?.pop() as string
   ) as DecodedToken;
+
+  if (!jwtTokenPayload) {
+    return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
+  }
 
   let orderBy: any[] = [{ publishedDate: "asc" }];
   const sortedByParams = request.nextUrl.searchParams.get("sortedBy");

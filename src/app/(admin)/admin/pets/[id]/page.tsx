@@ -39,10 +39,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { Pet } from "@/app/types";
 import capitalize from "capitalize";
 import { RxCross1 } from "react-icons/rx";
+import Cookies from "js-cookie";
 
 const EditPetPage = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const jwtToken: string = Cookies.get("jwtToken") ?? "";
 
   // variables for this page
   const petId = pathname.split("/").pop();
@@ -75,7 +77,16 @@ const EditPetPage = () => {
         price: Number(val.price),
       };
 
-      await axios.put(`/api/pets/${petId}`, { ...data });
+      await axios.put(
+        `/api/pets/${petId}`,
+        { ...data },
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+
       toast({
         title: "Pets updated",
         description: "Your pet is successfully updated in our database",
