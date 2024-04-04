@@ -33,6 +33,8 @@ import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { RxCross1 } from "react-icons/rx";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 
 const AddPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
@@ -40,6 +42,9 @@ const AddPetPage = () => {
   const [preview, setPreview] = useState<string | undefined>();
   const router = useRouter();
   const { toast } = useToast();
+
+  const jwtToken: string = Cookies.get("jwtToken") ?? "";
+  const userId: string = jwt.decode(jwtToken) as string;
 
   useEffect(() => {
     if (!selectedFile) {
@@ -84,7 +89,15 @@ const AddPetPage = () => {
         throw error;
       }
 
-      await axios.post("/api/pets", { ...data });
+      await axios.post(
+        "/api/pets",
+        { ...data },
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
       toast({
         title: "Pets added",
         description: "Your pet is successfully added to our database",
