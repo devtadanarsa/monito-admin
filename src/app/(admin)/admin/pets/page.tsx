@@ -40,12 +40,12 @@ import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
 import { IoIosArrowRoundUp } from "react-icons/io";
 import { IoIosArrowRoundDown } from "react-icons/io";
-import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 
 export default function Home() {
   const router = useRouter();
   const sortedParams = useSearchParams().get("sortedBy");
+  const jwtToken: string = Cookies.get("jwtToken") ?? "";
   const { toast } = useToast();
 
   const [petList, setPetList] = useState<Pet[]>([]);
@@ -57,14 +57,19 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       const { data: response } = await axios.get(
-        `/api/pets?sortedBy=${sortedParams}&name=${searchInput}&order=${orderRule}&page=${currentPage}`
+        `/api/pets?sortedBy=${sortedParams}&name=${searchInput}&order=${orderRule}&page=${currentPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       );
       setPetList(response.data);
       setTotalData(response.total);
     };
 
     fetchData();
-  }, [sortedParams, searchInput, currentPage, orderRule]);
+  }, [sortedParams, searchInput, currentPage, orderRule, jwtToken]);
 
   const deletePet = async (id: string, image: string) => {
     try {

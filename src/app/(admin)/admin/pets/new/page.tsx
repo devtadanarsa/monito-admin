@@ -44,7 +44,6 @@ const AddPetPage = () => {
   const { toast } = useToast();
 
   const jwtToken: string = Cookies.get("jwtToken") ?? "";
-  const userId: string = jwt.decode(jwtToken) as string;
 
   useEffect(() => {
     if (!selectedFile) {

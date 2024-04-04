@@ -24,8 +24,6 @@ export async function GET(request: NextRequest) {
     headers.get("Authorization")?.split(" ")?.pop() as string
   ) as DecodedToken;
 
-  console.log(jwtTokenPayload);
-
   let orderBy: any[] = [{ publishedDate: "asc" }];
   const sortedByParams = request.nextUrl.searchParams.get("sortedBy");
   const nameParams = request.nextUrl.searchParams.get("name") ?? "";
@@ -53,6 +51,9 @@ export async function GET(request: NextRequest) {
     where: {
       name: {
         contains: nameParams,
+      },
+      userId: {
+        equals: jwtTokenPayload.id,
       },
     },
     orderBy,
