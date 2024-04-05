@@ -2,14 +2,13 @@
 
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { EnumValues, ZodEnum, z } from "zod";
+import { z } from "zod";
 import { petFormSchema } from "../../../../lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,11 +26,7 @@ import InputField from "@/components/molecules/InputField";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
-import {
-  supabasePublicUrl,
-  supabaseUpdateFile,
-  supabaseUploadFile,
-} from "@/lib/supabase";
+import { supabasePublicUrl, supabaseUpdateFile } from "@/lib/supabase";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -93,7 +88,10 @@ const EditPetPage = () => {
       });
       router.push("/admin/pets");
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Some Error Occurred",
+        description: "Please try again",
+      });
     }
   };
 
@@ -125,7 +123,6 @@ const EditPetPage = () => {
 
       const getImageUrl = async () => {
         const imageUrl = await supabasePublicUrl(petData.image);
-        console.log(imageUrl);
         setPreview(imageUrl);
       };
 

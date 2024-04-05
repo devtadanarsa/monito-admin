@@ -266,7 +266,7 @@ const AddPetPage = () => {
                       <SelectItem value="red">Red</SelectItem>
                       <SelectItem value="apricot">Apricot</SelectItem>
                       <SelectItem value="black">Black</SelectItem>
-                      <SelectItem value="monchrome">Monochrome</SelectItem>
+                      <SelectItem value="monochrome">Monochrome</SelectItem>
                       <SelectItem value="silver">Silver</SelectItem>
                       <SelectItem value="tan">Tan</SelectItem>
                     </SelectContent>

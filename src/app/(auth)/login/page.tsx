@@ -40,7 +40,7 @@ const LoginPage = () => {
           description: "Your email or password is incorrect",
         });
       } else {
-        Cookies.set("jwtToken", result.data.token, { expires: 1 });
+        Cookies.set("jwtToken", `Bearer ${result.data.token}`, { expires: 1 });
 
         await toast({
           title: "Login successfull",

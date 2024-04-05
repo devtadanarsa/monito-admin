@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 import { DecodedToken } from "@/app/types";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
@@ -19,8 +20,8 @@ export async function DELETE(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
   const headers = await request.headers;
 
-  const jwtTokenPayload: DecodedToken = jwt.decode(
-    headers.get("Authorization")?.split(" ")?.pop() as string
+  const jwtTokenPayload: DecodedToken = verifyToken(
+    headers.get("Authorization") as string
   ) as DecodedToken;
 
   if (!jwtTokenPayload) {
@@ -40,8 +41,8 @@ export async function PUT(request: Request) {
   const headers = await request.headers;
   const reqBody = await request.json();
 
-  const jwtTokenPayload: DecodedToken = jwt.decode(
-    headers.get("Authorization")?.split(" ")?.pop() as string
+  const jwtTokenPayload: DecodedToken = verifyToken(
+    headers.get("Authorization") as string
   ) as DecodedToken;
 
   if (!jwtTokenPayload) {
