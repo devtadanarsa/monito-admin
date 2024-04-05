@@ -19,12 +19,13 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const id = request.nextUrl.pathname.split("/").pop();
   const headers = await request.headers;
+  let jwtTokenPayload: DecodedToken;
 
-  const jwtTokenPayload: DecodedToken = verifyToken(
-    headers.get("Authorization") as string
-  ) as DecodedToken;
-
-  if (!jwtTokenPayload) {
+  try {
+    jwtTokenPayload = verifyToken(
+      headers.get("Authorization") as string
+    ) as DecodedToken;
+  } catch (error) {
     return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
   }
 
@@ -40,12 +41,13 @@ export async function DELETE(request: NextRequest) {
 export async function PUT(request: Request) {
   const headers = await request.headers;
   const reqBody = await request.json();
+  let jwtTokenPayload: DecodedToken;
 
-  const jwtTokenPayload: DecodedToken = verifyToken(
-    headers.get("Authorization") as string
-  ) as DecodedToken;
-
-  if (!jwtTokenPayload) {
+  try {
+    jwtTokenPayload = verifyToken(
+      headers.get("Authorization") as string
+    ) as DecodedToken;
+  } catch (error) {
     return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
   }
 

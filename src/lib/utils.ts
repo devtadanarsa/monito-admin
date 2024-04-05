@@ -25,5 +25,9 @@ export const verifyToken = (jwtToken: string) => {
     throw new Error("Token not provided");
   }
 
-  return jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET!!);
+  try {
+    return jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET!!);
+  } catch (error) {
+    throw new Error("Token is Invalid");
+  }
 };

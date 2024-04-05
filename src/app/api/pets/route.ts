@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../prisma/client";
-import jwt from "jsonwebtoken";
 import { DecodedToken } from "@/app/types";
 import { verifyToken } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const headers = await request.headers;
   const reqBody = await request.json();
+  let jwtTokenPayload: DecodedToken;
 
-  const jwtTokenPayload: DecodedToken = verifyToken(
-    headers.get("Authorization") as string
-  ) as DecodedToken;
-
-  if (!jwtTokenPayload) {
+  try {
+    jwtTokenPayload = verifyToken(
+      headers.get("Authorization") as string
+    ) as DecodedToken;
+  } catch (error) {
     return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
   }
 
@@ -25,12 +25,13 @@ export async function POST(request: Request) {
 
 export async function GET(request: NextRequest) {
   const headers = await request.headers;
+  let jwtTokenPayload: DecodedToken;
 
-  const jwtTokenPayload: DecodedToken = verifyToken(
-    headers.get("Authorization") as string
-  ) as DecodedToken;
-
-  if (!jwtTokenPayload) {
+  try {
+    jwtTokenPayload = verifyToken(
+      headers.get("Authorization") as string
+    ) as DecodedToken;
+  } catch (error) {
     return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
   }
 
