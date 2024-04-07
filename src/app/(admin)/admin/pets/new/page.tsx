@@ -92,7 +92,7 @@ const AddPetPage = () => {
         { ...data },
         {
           headers: {
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: jwtToken,
           },
         }
       );
@@ -102,7 +102,10 @@ const AddPetPage = () => {
       });
       router.push("/admin/pets");
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Some error occurred",
+        description: "Please try again!",
+      });
     }
   };
 

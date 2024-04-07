@@ -60,7 +60,7 @@ export default function Home() {
         `/api/pets?sortedBy=${sortedParams}&name=${searchInput}&order=${orderRule}&page=${currentPage}`,
         {
           headers: {
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: jwtToken,
           },
         }
       );
@@ -80,7 +80,7 @@ export default function Home() {
       if (error) throw error;
       await axios.delete(`/api/pets/${id}`, {
         headers: {
-          Authorization: `Bearer ${jwtToken}`,
+          Authorization: jwtToken,
         },
       });
 

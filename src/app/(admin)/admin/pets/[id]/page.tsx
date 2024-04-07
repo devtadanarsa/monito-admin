@@ -77,7 +77,7 @@ const EditPetPage = () => {
         { ...data },
         {
           headers: {
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: jwtToken,
           },
         }
       );
