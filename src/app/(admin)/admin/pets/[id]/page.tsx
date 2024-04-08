@@ -40,6 +40,7 @@ const EditPetPage = () => {
   const router = useRouter();
   const pathname = usePathname();
   const jwtToken: string = Cookies.get("jwtToken") ?? "";
+  const { toast } = useToast();
 
   // variables for this page
   const petId = pathname.split("/").pop();
@@ -47,7 +48,7 @@ const EditPetPage = () => {
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
-  const { toast } = useToast();
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof petFormSchema>>({
     resolver: zodResolver(petFormSchema),
@@ -55,6 +56,7 @@ const EditPetPage = () => {
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
+      setIsButtonDisabled(true);
       if (selectedFile) {
         const { data, error } = await supabaseUpdateFile(
           selectedFile!!,
@@ -82,6 +84,8 @@ const EditPetPage = () => {
         }
       );
 
+      setIsButtonDisabled(false);
+
       toast({
         title: "Pets updated",
         description: "Your pet is successfully updated in our database",
@@ -92,6 +96,8 @@ const EditPetPage = () => {
         title: "Some Error Occurred",
         description: "Please try again",
       });
+
+      setIsButtonDisabled(false);
     }
   };
 

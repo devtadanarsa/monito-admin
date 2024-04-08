@@ -36,13 +36,14 @@ import { RxCross1 } from "react-icons/rx";
 import Cookies from "js-cookie";
 
 const AddPetPage = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const jwtToken: string = Cookies.get("jwtToken") ?? "";
+
   const [additionalInput, setAdditionalInput] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [preview, setPreview] = useState<string | undefined>();
-  const router = useRouter();
-  const { toast } = useToast();
-
-  const jwtToken: string = Cookies.get("jwtToken") ?? "";
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -75,6 +76,7 @@ const AddPetPage = () => {
 
   const onSubmit = async (val: z.infer<typeof petFormSchema>) => {
     try {
+      setIsButtonDisabled(true);
       const { fileUrl, error } = await supabaseUploadFile(selectedFile!!);
       const data = {
         ...val,
@@ -96,6 +98,9 @@ const AddPetPage = () => {
           },
         }
       );
+
+      setIsButtonDisabled(false);
+
       toast({
         title: "Pets added",
         description: "Your pet is successfully added to our database",
@@ -106,6 +111,7 @@ const AddPetPage = () => {
         title: "Some error occurred",
         description: "Please try again!",
       });
+      setIsButtonDisabled(false);
     }
   };
 
@@ -424,7 +430,7 @@ const AddPetPage = () => {
               </div>
             </div>
           </InputField>
-          <Button type="submit" size={"lg"}>
+          <Button type="submit" size={"lg"} disabled={isButtonDisabled}>
             Submit
           </Button>
         </form>

@@ -41,6 +41,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { IoIosArrowRoundUp } from "react-icons/io";
 import { IoIosArrowRoundDown } from "react-icons/io";
 import Cookies from "js-cookie";
+import Router from "next/router";
 
 export default function Home() {
   const router = useRouter();
@@ -89,6 +90,7 @@ export default function Home() {
         description: "Your pet has succesfully removed from the database",
       });
 
+      window.location.reload();
       setCurrentPage(1);
     } catch (error) {
       toast({
