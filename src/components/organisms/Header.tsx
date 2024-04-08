@@ -3,7 +3,6 @@ import React, { FC } from "react";
 import { buttonVariants } from "../ui/button";
 import { FaPlus } from "react-icons/fa";
 import { Separator } from "../ui/separator";
-import jwt from "jsonwebtoken";
 import { DecodedToken } from "@/app/types";
 import { verifyToken } from "@/lib/utils";
 
@@ -21,12 +20,20 @@ const Header: FC<HeaderProps> = ({ token }) => {
           <h3 className="text-sm">Admin</h3>
           <h2 className="font-semibold text-primary">{jwtTokenPayload.name}</h2>
         </div>
-        <Link
-          className={buttonVariants({ size: "lg" })}
-          href={"/admin/pets/new"}
-        >
-          Add Item <FaPlus className="ml-4" />
-        </Link>
+        <div className="flex items-center gap-5">
+          <Link
+            className={buttonVariants({ size: "lg" })}
+            href={"/admin/pets/new"}
+          >
+            Add New Pet <FaPlus className="ml-4" />
+          </Link>
+          <Link
+            className={buttonVariants({ size: "lg" })}
+            href={"/admin/posts/new"}
+          >
+            Add New Post <FaPlus className="ml-4" />
+          </Link>
+        </div>
       </div>
       <Separator className="mt-5" />
     </>

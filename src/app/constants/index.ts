@@ -1,4 +1,5 @@
 import { AiOutlineHome, AiOutlineMessage } from "react-icons/ai";
+import { BsFileEarmarkPost } from "react-icons/bs";
 import { PiDog } from "react-icons/pi";
 
 export const SORT_FILTER = [
@@ -30,8 +31,8 @@ export const SIDEBAR_LINK = [
     href: "/admin/pets",
   },
   {
-    label: "Messages",
-    icon: AiOutlineMessage,
-    href: "/pets",
+    label: "Post Listing",
+    icon: BsFileEarmarkPost,
+    href: "/admin/posts",
   },
 ];
