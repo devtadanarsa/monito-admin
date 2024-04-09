@@ -1,3 +1,4 @@
+import { title } from "process";
 import { z } from "zod";
 
 export const petFormSchema = z.object({
@@ -25,6 +26,14 @@ export const petFormSchema = z.object({
   dewormed: z.boolean(),
   microchip: z.boolean(),
   additional: z.array(z.string(), {}),
+});
+
+export const postFormSchema = z.object({
+  featuredImage: z.any().optional(),
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(5, { message: "Title must've at least 5 characterss" }),
+  content: z.string().optional(),
 });
 
 export const loginFormSchema = z.object({

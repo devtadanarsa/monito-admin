@@ -35,6 +35,7 @@ model Pet {
 model Post {
   id            String @id @default(cuid())
   featuredImage String
+  title         String
   content       String
 }
 
