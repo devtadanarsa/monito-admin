@@ -33,10 +33,11 @@ model Pet {
 }
 
 model Post {
-  id            String @id @default(cuid())
+  id            String   @id @default(cuid())
   featuredImage String
   title         String
   content       String
+  updatedAt     DateTime @default(now()) @updatedAt
 }
 
 model User {

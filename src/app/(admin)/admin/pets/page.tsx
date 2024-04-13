@@ -32,7 +32,7 @@ import { Pet } from "../../../types";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SORT_FILTER, TABLE_COLUMN } from "../../../constants";
+import { PET_SORT_FILTER, PET_TABLE_COLUMN } from "../../../constants";
 import { Input } from "@/components/ui/input";
 import capitalize from "capitalize";
 import { HiMagnifyingGlass } from "react-icons/hi2";
@@ -143,7 +143,7 @@ export default function Home() {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {SORT_FILTER.map((item, i) => (
+                  {PET_SORT_FILTER.map((item, i) => (
                     <SelectItem key={item.label + i} value={item.href}>
                       {item.label}
                     </SelectItem>
@@ -184,7 +184,7 @@ export default function Home() {
           )}
           <TableHeader>
             <TableRow className="bg-primary hover:bg-primary">
-              {TABLE_COLUMN.map((item: string, i: number) => (
+              {PET_TABLE_COLUMN.map((item: string, i: number) => (
                 <TableHead className="text-center" key={i}>
                   <p className="text-white">{item}</p>
                 </TableHead>

@@ -2,7 +2,7 @@ import { AiOutlineHome, AiOutlineMessage } from "react-icons/ai";
 import { BsFileEarmarkPost } from "react-icons/bs";
 import { PiDog } from "react-icons/pi";
 
-export const SORT_FILTER = [
+export const PET_SORT_FILTER = [
   {
     label: "Sorted by Date",
     href: "date",
@@ -17,7 +17,27 @@ export const SORT_FILTER = [
   },
 ];
 
-export const TABLE_COLUMN = ["No", "Name", "Size", "Price", "Gender", "Action"];
+export const POST_SORT_FILTER = [
+  {
+    label: "Sorted by Date",
+    href: "date",
+  },
+  {
+    label: "Sorted by Name",
+    href: "name",
+  },
+];
+
+export const PET_TABLE_COLUMN = [
+  "No",
+  "Name",
+  "Size",
+  "Price",
+  "Gender",
+  "Action",
+];
+
+export const POST_TABLE_COLUMN = ["No", "Title", "Updated Date", "Action"];
 
 export const SIDEBAR_LINK = [
   {
