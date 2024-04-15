@@ -54,7 +54,13 @@ export async function GET(request: NextRequest) {
       break;
   }
 
-  const totalResult = await prisma.pet.count();
+  const totalResult = await prisma.pet.count({
+    where: {
+      userId: {
+        equals: jwtTokenPayload.id,
+      },
+    },
+  });
 
   const result = await prisma.pet.findMany({
     skip,
