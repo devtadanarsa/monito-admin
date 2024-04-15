@@ -35,9 +35,34 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized Access" }, { status: 401 });
   }
 
+  let orderBy: any[] = [{ updatedAt: "asc" }];
+  const nameParams = request.nextUrl.searchParams.get("name") ?? "";
+  const pageParams = request.nextUrl.searchParams.get("page") ?? 1;
+  const sortedByParams = request.nextUrl.searchParams.get("sortedBy");
+  const orderRuleParams = request.nextUrl.searchParams.get("order") ?? "asc";
+  const skip = nameParams.length == 0 ? ((pageParams as number) - 1) * 5 : 0;
+
+  switch (sortedByParams) {
+    case "date":
+      orderBy = [{ updatedAt: orderRuleParams }];
+      break;
+    case "name":
+      orderBy = [{ title: orderRuleParams }];
+      break;
+  }
+
   const totalResult = await prisma.post.count();
 
-  const result = await prisma.post.findMany();
+  const result = await prisma.post.findMany({
+    skip,
+    take: 5,
+    where: {
+      title: {
+        contains: nameParams,
+      },
+    },
+    orderBy,
+  });
 
   return NextResponse.json({ data: result, total: totalResult });
 }
