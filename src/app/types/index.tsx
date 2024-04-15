@@ -15,6 +15,14 @@ export type Pet = {
   additional: string[];
 };
 
+export type Post = {
+  id: string;
+  featuredImage: string;
+  title: string;
+  content: string;
+  updatedAt: string;
+};
+
 export interface DecodedToken {
   id: string;
   name: string;
