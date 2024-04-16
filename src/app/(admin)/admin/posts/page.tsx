@@ -37,6 +37,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { FaPen, FaTrash } from "react-icons/fa";
+import dateFormat, { masks } from "dateformat";
 
 const PostListingPage = () => {
   const router = useRouter();
@@ -155,7 +156,9 @@ const PostListingPage = () => {
                 {i + (currentPage - 1) * 5 + 1}
               </TableCell>
               <TableCell className="text-center">{item.title}</TableCell>
-              <TableCell className="text-center">{item.updatedAt}</TableCell>
+              <TableCell className="text-center">
+                {dateFormat(item.updatedAt, "dd mmm yyyy")}
+              </TableCell>
               <TableCell className="text-center">
                 <div className="flex justify-center gap-4">
                   <Button

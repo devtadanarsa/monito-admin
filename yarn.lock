@@ -652,6 +652,11 @@
   resolved "https://registry.npmjs.org/@types/capitalize/-/capitalize-2.0.2.tgz"
   integrity sha512-J3I2HyJL4ui26Nwg6fQHx+1pg4Mn0i25T2Q1DIE1fyfySERXlT7j0F06gI52COlt8J26YETAWUCzrWNH/F/PeA==
 
+"@types/dateformat@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.npmjs.org/@types/dateformat/-/dateformat-5.0.2.tgz"
+  integrity sha512-M95hNBMa/hnwErH+a+VOD/sYgTmo15OTYTM2Hr52/e0OdOuY+Crag+kd3/ioZrhg0WGbl9Sm3hR7UU+MH6rfOw==
+
 "@types/draft-convert@^2.1.8":
   version "2.1.8"
   resolved "https://registry.npmjs.org/@types/draft-convert/-/draft-convert-2.1.8.tgz"
@@ -1311,6 +1316,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+dateformat@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.npmjs.org/dateformat/-/dateformat-5.0.3.tgz"
+  integrity sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==
 
 debug@^3.2.7:
   version "3.2.7"
