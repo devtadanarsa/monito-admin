@@ -165,6 +165,7 @@ const PostListingPage = () => {
                     size={"icon"}
                     variant={"outline"}
                     className="border-primary text-orange-primary hover:text-orange-primary"
+                    onClick={() => router.push(`/admin/posts/${item.id}`)}
                   >
                     <FaPen className="text-primary" />
                   </Button>

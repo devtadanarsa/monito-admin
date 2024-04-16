@@ -134,7 +134,7 @@ const EditPetPage = () => {
 
       getImageUrl();
       setAdditionalInput(petData?.additional!!);
-      setPreview(petData.image);
+      // setPreview(petData.image);
     }
   }, [petData, form]);
 

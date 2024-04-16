@@ -15,17 +15,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState } from "draft-js";
+import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { Button } from "@/components/ui/button";
-import { convertToHTML } from "draft-convert";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
 import InputField from "@/components/molecules/InputField";
-import { supabaseUploadFile } from "@/lib/supabase";
+import { supabasePublicUrl } from "@/lib/supabase";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
+import { Post } from "@/app/types";
 
 const AddPostPage = () => {
   const router = useRouter();
@@ -35,11 +35,51 @@ const AddPostPage = () => {
   const postId = pathname.split("/").pop();
 
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const [postData, setPostData] = useState<Post>();
   const [preview, setPreview] = useState<string | undefined>();
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+
+  const form = useForm<z.infer<typeof postFormSchema>>({
+    resolver: zodResolver(postFormSchema),
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: response } = await axios.get(`/api/posts/${postId}`);
+      setPostData(response);
+    };
+
+    fetchData();
+  }, [postId]);
+
+  useEffect(() => {
+    if (postData) {
+      form.reset({
+        title: postData.title,
+      });
+
+      const getImageUrl = async () => {
+        const imageUrl = await supabasePublicUrl(postData.featuredImage);
+        setPreview(imageUrl);
+      };
+
+      const blocksFromHTML = convertFromHTML(postData.content);
+
+      setEditorState(
+        EditorState.createWithContent(
+          ContentState.createFromBlockArray(
+            blocksFromHTML.contentBlocks,
+            blocksFromHTML.entityMap
+          )
+        )
+      );
+
+      getImageUrl();
+    }
+  }, [postData, form]);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -59,10 +99,6 @@ const AddPostPage = () => {
 
     setSelectedFile(e.target.files[0]);
   };
-
-  const form = useForm<z.infer<typeof postFormSchema>>({
-    resolver: zodResolver(postFormSchema),
-  });
 
   const onSubmit = async (values: z.infer<typeof postFormSchema>) => {};
 
@@ -100,6 +136,7 @@ const AddPostPage = () => {
                     width={200}
                     height={100}
                     objectFit="contain"
+                    unoptimized
                   />
                 </div>
               )}
