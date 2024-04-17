@@ -20,12 +20,13 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { PiPlusThin } from "react-icons/pi";
 import InputField from "@/components/molecules/InputField";
-import { supabasePublicUrl } from "@/lib/supabase";
+import { supabasePublicUrl, supabaseUpdateFile } from "@/lib/supabase";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { Post } from "@/app/types";
+import { convertToHTML } from "draft-convert";
 
 const AddPostPage = () => {
   const router = useRouter();
@@ -100,7 +101,51 @@ const AddPostPage = () => {
     setSelectedFile(e.target.files[0]);
   };
 
-  const onSubmit = async (values: z.infer<typeof postFormSchema>) => {};
+  const onSubmit = async (values: z.infer<typeof postFormSchema>) => {
+    try {
+      setIsButtonDisabled(true);
+      const contentValue = convertToHTML(editorState.getCurrentContent());
+
+      if (selectedFile) {
+        const { data, error } = await supabaseUpdateFile(
+          selectedFile,
+          postData?.featuredImage!!
+        );
+        if (error) throw error;
+      }
+
+      const data = {
+        ...values,
+        id: postId,
+        featuredImage: postData?.featuredImage,
+        content: contentValue,
+      };
+
+      await axios.put(
+        `/api/posts/${postId}`,
+        { ...data },
+        {
+          headers: {
+            Authorization: jwtToken,
+          },
+        }
+      );
+
+      toast({
+        title: "Post updated",
+        description: "Your post is successfully updated in our database",
+      });
+
+      router.push("/admin/posts");
+    } catch (error) {
+      toast({
+        title: "Some Error Occurred",
+        description: "Please try again",
+      });
+    } finally {
+      setIsButtonDisabled(false);
+    }
+  };
 
   return (
     <Form {...form}>

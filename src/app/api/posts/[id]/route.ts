@@ -35,5 +35,5 @@ export async function PUT(request: Request) {
     data: reqBody,
   });
 
-  return NextResponse.json(updatedPost, { status: 204 });
+  return NextResponse.json(updatedPost);
 }
