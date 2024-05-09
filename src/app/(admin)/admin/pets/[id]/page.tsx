@@ -425,7 +425,7 @@ const EditPetPage = () => {
           </InputField>
 
           <InputField
-            title="Additional Infomation"
+            title="Additional Information"
             subtitle="Please add additional information about your pets, such as : Pure Breed Shizu, Good body structure, etc"
           >
             <div>
@@ -434,7 +434,7 @@ const EditPetPage = () => {
                   id="addInputField"
                   type="text"
                   className="w-1/4"
-                  placeholder="Good body structur, etc"
+                  placeholder="Good body structure, etc"
                 />
                 <Button
                   variant={"outline"}

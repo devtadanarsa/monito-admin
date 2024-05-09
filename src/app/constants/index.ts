@@ -37,7 +37,7 @@ export const PET_TABLE_COLUMN = [
   "Action",
 ];
 
-export const POST_TABLE_COLUMN = ["No", "Title", "Updated Date", "Action"];
+export const POST_TABLE_COLUMN = ["No", "Title", "Last Updated", "Action"];
 
 export const SIDEBAR_LINK = [
   {
